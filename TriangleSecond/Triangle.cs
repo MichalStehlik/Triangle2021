@@ -6,11 +6,19 @@ using System.Threading.Tasks;
 
 namespace TriangleSecond
 {
+    /// <summary>
+    /// Class for basic calculations in triangle.
+    /// </summary>
     class Triangle
     {
         #region Sides
-        private float _a;
-        public float A {
+        private double _a;
+
+        /// <summary>
+        /// Sets and gets side "a" of triangle
+        /// Throws ArgumentException for values below or equal to zero. 
+        /// </summary>
+        public double A {
             get { return _a; }
             set {
                 if (value > 0)
@@ -20,8 +28,12 @@ namespace TriangleSecond
             } 
         }
 
-        private float _b;
-        public float B
+        private double _b;
+        /// <summary>
+        /// Sets and gets side "b" of triangle
+        /// Throws ArgumentException for values below or equal to zero. 
+        /// </summary>
+        public double B
         {
             get { return _b; }
             set
@@ -33,9 +45,12 @@ namespace TriangleSecond
             }
         }
 
-        private float _c;
-
-        public float C
+        private double _c;
+        /// <summary>
+        /// Sets and gets side "c" of triangle
+        /// Throws ArgumentException for values below or equal to zero. 
+        /// </summary>
+        public double C
         {
             get { return _c; }
             set
@@ -47,71 +62,113 @@ namespace TriangleSecond
             }
         }
         #endregion
-
-        public void SetSides(float a, float b, float c)
+        /// <summary>
+        /// Sets all three sides of triengle.
+        /// Throws ArgumentException for values below or equal to zero. 
+        /// </summary>
+        /// <param name="a">Side a</param>
+        /// <param name="b">Side b</param>
+        /// <param name="c">Side c</param>
+        public void SetSides(double a, double b, double c)
         {
             A = a;
             B = b;
             C = c;
         }
 
-        public Triangle(float a, float b, float c)
+        /// <summary>
+        /// Constructor for common triangle.
+        /// Throws ArgumentException for values below or equal to zero. 
+        /// </summary>
+        /// <param name="a">Side a</param>
+        /// <param name="b">Side b</param>
+        /// <param name="c">Side c</param>
+        public Triangle(double a, double b, double c)
         {
             A = a;
             B = b;
             C = c;
         }
-        public Triangle(float side)
+
+        /// <summary>
+        /// Constructor for equilateral triangle.
+        /// Throws ArgumentException for values below or equal to zero. 
+        /// </summary>
+        /// <param name="side"></param>
+        public Triangle(double side)
         {
             A = B = C = side;
         }
 
-        public float Alpha
+        /// <summary>
+        /// Gets alpha angle in radians, returns 0 if triangle cannot be constructed
+        /// </summary>
+        public double Alpha
         {
-            get { 
-                return 0; 
+            get {
+                return IsExisting() ? Math.Acos((B * B + C * C - A * A) / (2 * B * C)) : 0;
             }
         }
 
-        public float Beta
+        /// <summary>
+        /// /// Gets beta angle in radians, returns 0 if triangle cannot be constructed
+        /// </summary>
+        public double Beta
         {
             get
             {
-                return 0;
+                return IsExisting() ? Math.Acos((A * A + C * C - B * B) / (2 * A * C)) : 0;
             }
         }
 
-        public float Gamma
+        /// <summary>
+        /// Gets gamma angle in radians, returns 0 if triangle cannot be constructed
+        /// </summary>
+        public double Gamma
         {
             get
             {
-                return 0;
+                return IsExisting() ? Math.Acos((A * A + B * B - C * C) / (2 * A * B)) : 0;
             }
         }
 
-        public float Outline
+        /// <summary>
+        /// Gets length of outline. Returns 0 if triangle cannot be constructed.
+        /// </summary>
+        public double Outline
         {
             get
             {
-                return A + B + C;
+                return IsExisting() ? A + B + C : 0;
             }
         }
 
-        public float GetOutline()
+        /// <summary>
+        /// Returns total length of outline.
+        /// </summary>
+        /// <returns>Length of all sides combined. Zero if triangle cannot be constructed.</returns>
+        public double GetOutline()
         {
-            return A + B + C;
+            return Outline;
         }
-        public float Area
+
+        /// <summary>
+        /// Gets area of triangle. Returns 0 if triangle cannot be constructed.
+        /// </summary>
+        public double Area
         {
             get
             {
-                return 0;
+                return IsExisting() ? Math.Sqrt(Outline * (Outline - A) * (Outline - B) * (Outline - C)) : 0;
             }
         }
-
-        public float GetArea()
+        /// <summary>
+        /// Gets total area of triengle. Returns 0 if triangle cannot be constructed.
+        /// </summary>
+        /// <returns>Area of triangle. Zero if triangle cannot be constructed.</returns>
+        public double GetArea()
         {
-            return 0;
+            return Area;
         }
 
         /// <summary>
@@ -121,14 +178,18 @@ namespace TriangleSecond
         /// <param name="b">Side b</param>
         /// <param name="c">Side c</param>
         /// <returns>Bool. True if can be constructed, otherwise returns false.</returns>
-        public static bool CanExists(float a, float b, float c)
+        public static bool CanExists(double a, double b, double c)
         {
-            float outline = a + b + c;
-            float[] sides = new float[] { a, b, c };
-            float maxSide = sides.Max();
+            double outline = a + b + c;
+            double[] sides = new double[] { a, b, c };
+            double maxSide = sides.Max();
             return maxSide < (outline - maxSide);
         }
 
+        /// <summary>
+        /// Returns information about constructivity of triangle.
+        /// </summary>
+        /// <returns>True if triangle can be constructed, otherwise false.</returns>
         public bool IsExisting()
         {
             return CanExists(A, B, C);
